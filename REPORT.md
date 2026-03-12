@@ -1,5 +1,13 @@
 # CSDA Fire Product – Work Summary and Findings
 
+## Key Points (Summary)
+
+- **No single fire/date in the examined region has Planet + Satellogic + Umbra + ICEYE + Landsat coverage.**
+- **2024 fires tested (including the large PARK fire)**: Planet and Landsat have strong coverage; Umbra, ICEYE, and Satellogic all return **0** scenes over the tested AOIs/date windows.
+- **2025 SoCal fires tested (PALISADES, EATON, HUGHES)**: Planet and Umbra have multiple scenes; ICEYE and Satellogic return **0** scenes.
+- **Umbra vs ICEYE in 2024**: Spatial overlap exists, but month-by-month histograms show **no temporal overlap** (ICEYE in Jan–Jul, Umbra in Sep–Dec), so a same-time intersection between these two missions in 2024 is not achievable in the examined area.
+- The strongest multi-source combination actually observed is **Planet + Umbra (plus Landsat from GEE)**; all tables below provide supporting detail.
+
 ## Objective
 
 | Item            | Description                                                                                 |
