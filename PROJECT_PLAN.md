@@ -2,14 +2,16 @@
 
 ## Goal
 
-Create a **single, self-contained PowerPoint slide** that is aesthetically pleasing and visually appealing:
+Create a **single, self-contained PowerPoint slide** that is aesthetically pleasing and visually appealing, aligned with current guidance from KPV:
 
 | Left side | Right side |
 |-----------|------------|
-| Map of fire-affected perimeter from CAL FIRE shapefile (California inset and/or US inset) | 5 satellite images for the **same day** (or closest available) showing post-fire conditions: **Planet**, **Satellogic**, **Umbra**, **ICEYE**, **Landsat** |
+| Map of fire-affected perimeter from CAL FIRE shapefile (California inset and/or US inset) | **Phase 1 (now)**: Landsat + Sentinel‑2 post-fire images for a California fire. **Phase 2 (later, once CSDA access is confirmed)**: add Planet + Umbra panels for the same California fire, and, where possible, single-site CSDA examples over Southeastern states (e.g., ICEYE over an Alabama fire) for comparison with Sentinel/Landsat. |
 
 - **Map**: Made in **QGIS** (perimeter + insets).
-- **Imagery**: Sourced via [CSDAP Satellite Data Explorer](https://csdap.earthdata.nasa.gov/explore/) (Planet, Satellogic, Umbra, ICEYE) and **Google Earth Engine** (Landsat).
+- **Imagery**:
+  - **Now**: **Landsat** and **Sentinel‑2** via Google Earth Engine (and/or Copernicus Open Access Hub / NASA services) for California fires.
+  - **Later (pending CSDA reply)**: Planet + Umbra for the same California fires, and other CSDA missions (e.g., ICEYE, Satellogic) where they intersect study sites in the Southeastern states (including Alabama).
 - **Fire perimeters**: [California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all) — shapefile for study area and date.
 
 ---
@@ -43,17 +45,26 @@ The intersection step is limited by the *scarcest* sources. Based on CSDA “rec
 - **Satellogic** scenes for 2025 over California are effectively limited to **Nov–Dec 2025** (plus a small January contribution).
 - **Planet** is abundant and rarely limiting.
 
-**Practical consequence**: in this California analysis there is **no year/month window where Umbra, ICEYE, and Satellogic all overlap in time**, so a true five-mission intersection (Planet + Satellogic + Umbra + ICEYE + Landsat) is not achievable with the currently accessible CSDA archives.
+**Practical consequence for California**: with the currently accessible CSDA archives there is **no year/month window where Umbra, ICEYE, and Satellogic all overlap in time**, so a true five-mission intersection (Planet + Satellogic + Umbra + ICEYE + Landsat/Sentinel‑2) is not achievable there. This motivates a **phased strategy**:
+
+- **Phase 1 (California)**: focus on **Landsat + Sentinel‑2** (plus Planet/Umbra when available) for a well-chosen CAL FIRE perimeter.
+- **Phase 2 (Southeastern U.S., including Alabama)**: search CSDA holdings for sites that intersect relevant fires; if there is no multi-mission intersection, use **single-site examples** such as **ICEYE over an Alabama fire**, compared against **Sentinel‑2 or Landsat**.
 
 ### Hybrid workflow (the only workflow used)
 
 1. **Shortlist fires from CAL FIRE** (recent + large): use `scripts/rank_fires.py` to generate candidates with fire name, year, acres, alarm/control date (if present), and a WGS84 bbox.
-2. **Choose 2–3 candidates (not 1)** and add them to `data/study_area_tracker.csv`.
+2. **Choose 2–3 California fire candidates (not 1)** and add them to `data/study_area_tracker.csv`.
 3. **Lock a target post-fire date window**: aim for the same day across sources; otherwise use the closest available date(s) within a defined tolerance.
-4. **Populate the 5-source matrix** for each candidate:
-   - **Landsat** via GEE (scene ID + date)
-   - **Planet / Satellogic / Umbra / ICEYE** via CSDAP (item ID + date + overlap evidence)
-5. **Select the winner row**: the candidate with all 5 sources present and the strongest visual story, then produce the slide.
+4. **Phase 1 (immediate, California)**:
+   - Populate **Landsat** and **Sentinel‑2** entries for each candidate (scene ID + date).
+   - Where CSDA access already allows, also populate **Planet** and **Umbra** entries.
+5. **Phase 2 (CSDA-driven, Southeastern U.S.)**:
+   - Use CSDAP to look for **CSDA sites in Southeastern states (including Alabama)** that intersect fire events of interest.
+   - If there is an intersection, populate **Planet / Satellogic / Umbra / ICEYE** entries (item ID + date + overlap evidence) in the tracker or a derivative table.
+   - If there is *no* multi-mission intersection, identify **single-site examples** (e.g., **ICEYE** over an Alabama fire) and plan comparisons to **Sentinel‑2 or Landsat**.
+6. **Select the winner row / example set**:
+   - For California, choose a fire/date with at least **Landsat + Sentinel‑2** (and optionally Planet + Umbra) and the strongest visual story for the main slide.
+   - For Southeastern/Alabama examples, choose one or more ICEYE‑vs‑Sentinel/Landsat comparisons to highlight as supporting examples.
 
 ### Exit criteria for selection
 
@@ -93,11 +104,12 @@ These 2024 results remain useful as negative evidence and should be referenced i
 
 ## Groundwork Checklist (Before Full Credentials)
 
-- [ ] **CAL FIRE data**: Download shapefile from [California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all) (or [California Open Data](https://data.ca.gov/dataset/cal-fire)) and run `scripts/rank_fires.py` to get a candidate list.
-- [ ] **Study area**: Choose 1–3 candidate fires (name, date, bbox); add to `data/study_area_tracker.csv`.
-- [ ] **Landsat**: In GEE, find scene IDs for the chosen fire(s) and date(s); add to tracker.
-- [ ] **CSDAP**: When you have access, for each candidate fire/date: browse by location/date, use “copy item ID” and layer toggle to confirm footprint; fill Planet, Satellogic, Umbra, ICEYE IDs and dates in tracker.
-- [ ] **Final choice**: Pick the fire/date with all 5 IDs and best visual; note “same day” or “closest day” in the slide.
+- [ ] **CAL FIRE data (California)**: Download shapefile from [California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all) (or [California Open Data](https://data.ca.gov/dataset/cal-fire)) and run `scripts/rank_fires.py` to get a candidate list.
+- [ ] **Study area (California)**: Choose 1–3 candidate California fires (name, date, bbox); add to `data/study_area_tracker.csv`.
+- [ ] **Landsat + Sentinel‑2 (California)**: In GEE (and/or Copernicus services), find Landsat and Sentinel‑2 scene IDs for the chosen fire(s) and date(s); add to the tracker.
+- [ ] **CSDAP (California, later)**: When you have access, for each candidate fire/date: browse by location/date, use “copy item ID” and layer toggle to confirm footprint; fill Planet and Umbra IDs and dates in the tracker as they become available.
+- [ ] **CSDA sites in Southeastern U.S. (including Alabama)**: Use CSDAP to search for tiles/sites that intersect relevant fire locations. If matches exist, record Planet/Satellogic/Umbra/ICEYE IDs and dates; if not, identify single-site examples (e.g., ICEYE over an Alabama fire) for comparison with Sentinel‑2 or Landsat.
+- [ ] **Final choice**: Pick (a) the California fire/date to feature with Landsat + Sentinel‑2 (and later Planet + Umbra) and (b) any ICEYE‑vs‑Sentinel/Landsat examples from the Southeast; note “same day” or “closest day” in the slide and report text.
 
 ---
 
@@ -105,10 +117,10 @@ These 2024 results remain useful as negative evidence and should be referenced i
 
 | Source | Purpose | Access |
 |--------|---------|--------|
-| [CAL FIRE — California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all) | Fire perimeter geometry, name, date, area | Download shapefile / inspect in QGIS |
-| [CSDAP — Satellite Data Explorer](https://csdap.earthdata.nasa.gov/explore/) | Planet, Satellogic, Umbra, ICEYE imagery | Browse; copy item IDs; request data when credentials allow |
+| [CAL FIRE — California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all) | Fire perimeter geometry, name, date, area (California) | Download shapefile / inspect in QGIS |
+| [CSDAP — Satellite Data Explorer](https://csdap.earthdata.nasa.gov/explore/) | Planet, Satellogic, Umbra, ICEYE imagery (California + Southeastern U.S.) | Browse; copy item IDs; request data when credentials allow |
 | [CSDAP — Data Acquisition Request System](https://csdap.earthdata.nasa.gov/user-guide/#data-acquisition-request-system) | How to request/download imagery | After permissions |
-| Google Earth Engine | Landsat imagery | Use for same bbox/date; export scene IDs |
+| Google Earth Engine | Landsat + Sentinel‑2 imagery | Use for same bbox/date; export scene IDs |
 
 ---
 
