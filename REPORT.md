@@ -3,10 +3,11 @@
 ## Key Points (Summary)
 
 - **Umbra and ICEYE have no temporal intersection over California in this analysis**: ICEYE has 2024 records in Jan–Jul; Umbra has 2024 records in Sep–Dec and additional volume in 2025, so a same-time Umbra+ICEYE pairing is not achievable there.
-- **No single fire/date in the examined region has Planet + Satellogic + Umbra + ICEYE + Landsat coverage.**
-- **2024 fires tested (including the large PARK fire)**: Planet and Landsat have strong coverage; Umbra, ICEYE, and Satellogic all return **0** scenes over the tested AOIs/date windows.
+- **No single fire/date in the examined region has Planet + Satellogic + Umbra + ICEYE + Landsat/Sentinel‑2 coverage.**
+- **2024 fires tested (including the large PARK fire)**: Planet and Landsat/Sentinel‑2 have strong optical coverage; Umbra, ICEYE, and Satellogic all return **0** scenes over the tested AOIs/date windows.
 - **2025 SoCal fires tested (PALISADES, EATON, HUGHES)**: Planet and Umbra have multiple scenes; ICEYE and Satellogic return **0** scenes.
-- The strongest multi-source combination actually observed is **Planet + Umbra (plus Landsat from GEE)**; all tables below provide supporting detail.
+- The strongest CSDA multi-source combination actually observed over the California test fires is **Planet + Umbra (plus Landsat/Sentinel‑2 from GEE)**; all tables below provide supporting detail.
+- **Operationally, per KPV’s guidance**, the near-term focus is to: (1) build a clean California case study using **Landsat + Sentinel‑2** (and later Planet + Umbra) and (2) search for **Southeastern U.S. sites (including Alabama)** with CSDA coverage, using **single-site ICEYE examples** compared with Sentinel/Landsat where multi-mission intersections are not available.
 
 ## Objective
 
@@ -95,23 +96,28 @@ In all 2025 tests, Planet and Umbra showed archive coverage; ICEYE and Satellogi
 
 ### Per-candidate availability
 
-| Fire (year)        | Planet        | Landsat | Umbra | ICEYE | Satellogic | Notes                                      |
-|--------------------|--------------|---------|-------|-------|------------|--------------------------------------------|
-| PARK (2024)        | 63 scenes    | 6 scenes| 0     | 0     | 0          | Large 2024 fire, rejected                  |
-| BRIDGE (2024)      | Yes          | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
-| LINE (2024)        | Yes          | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
-| AIRPORT (2024)     | Yes          | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
-| PALISADES (2025)   | Yes          | Expected| ≈30   | 0     | 0          | Partial: Planet + Umbra                    |
-| EATON (2025)       | Yes          | Expected| ≈36   | 0     | 0          | Partial: Planet + Umbra                    |
-| HUGHES (2025)      | Yes          | Expected| ≈6    | 0     | 0          | Partial: Planet + Umbra                    |
+| Fire (year)        | Planet        | Landsat/Sentinel‑2 | Umbra | ICEYE | Satellogic | Notes                                                                 |
+|--------------------|--------------|---------------------|-------|-------|------------|-----------------------------------------------------------------------|
+| PARK (2024)        | 63 scenes    | 6 scenes (optical) | 0     | 0     | 0          | Large 2024 fire, rejected for 5‑mission intersection                  |
+| BRIDGE (2024)      | Yes          | Yes                | 0     | 0     | 0          | SoCal corridor, rejected for 5‑mission intersection                   |
+| LINE (2024)        | Yes          | Yes                | 0     | 0     | 0          | SoCal corridor, rejected for 5‑mission intersection                   |
+| AIRPORT (2024)     | Yes          | Yes                | 0     | 0     | 0          | SoCal corridor, rejected for 5‑mission intersection                   |
+| PALISADES (2025)   | Yes          | Expected           | ≈30   | 0     | 0          | Partial: Planet + Umbra + Landsat/Sentinel‑2 (optical from GEE)      |
+| EATON (2025)       | Yes          | Expected           | ≈36   | 0     | 0          | Partial: Planet + Umbra + Landsat/Sentinel‑2 (optical from GEE)      |
+| HUGHES (2025)      | Yes          | Expected           | ≈6    | 0     | 0          | Partial: Planet + Umbra + Landsat/Sentinel‑2 (optical from GEE)      |
 
 ### Overall
 
-| Aspect                      | Observation                                                                 |
-|-----------------------------|-----------------------------------------------------------------------------|
-| 5‑mission intersection      | No single fire/date with Planet + Satellogic + Umbra + ICEYE + Landsat observed. |
-| 2024 SoCal fires            | Planet + Landsat present; Umbra/ICEYE/Satellogic all 0 for tested AOIs/windows. |
-| 2025 SoCal fires            | Planet + Umbra present; ICEYE/Satellogic 0 for tested AOIs/windows.         |
-| ICEYE 2025 histogram        | No 2025 bar in `iceye_hist.png` → no 2025 archive entries visible in catalog. |
-| Strongest observed combo    | Planet + Umbra (plus Landsat from GEE) for 2025 SoCal candidates.          |
+| Aspect                      | Observation                                                                                 |
+|-----------------------------|---------------------------------------------------------------------------------------------|
+| 5‑mission intersection      | No single fire/date with Planet + Satellogic + Umbra + ICEYE + Landsat/Sentinel‑2 observed. |
+| 2024 SoCal fires            | Planet + Landsat/Sentinel‑2 present; Umbra/ICEYE/Satellogic all 0 for tested AOIs/windows.  |
+| 2025 SoCal fires            | Planet + Umbra present; ICEYE/Satellogic 0 for tested AOIs/windows.                         |
+| ICEYE 2025 histogram        | No 2025 bar in `iceye_hist.png` → no 2025 archive entries visible in catalog.              |
+| Strongest observed combo    | Planet + Umbra (plus Landsat/Sentinel‑2 from GEE) for 2025 SoCal candidates.               |
+
+### Planned operational next steps (per KPV)
+
+- **California**: build a primary case study using **Landsat + Sentinel‑2** over a CAL FIRE perimeter, then, once CSDA access is confirmed, augment with **Planet + Umbra** on the same (or closest) post‑fire date.
+- **Southeastern states (including Alabama)**: search CSDA for sites that intersect fire locations; where multi-mission intersections do not exist, use **single-site examples** (e.g., **ICEYE over an Alabama fire**) and compare them against **Sentinel‑2 or Landsat**.
 
