@@ -52,6 +52,13 @@ CSDAP “data availability” visualizations were captured and stored in `data/d
 
 Spatially, the tile plots indicate higher counts for Umbra/ICEYE/Satellogic along a diagonal corridor roughly from Fresno to the Southern California region (including near Los Angeles and San Diego).
 
+Additional 2024-only histograms were examined for the overlapping Umbra and ICEYE regions:
+
+- **Umbra 2024** (`umbra_hist_2024.png`): counts concentrated in **September–December 2024**.
+- **ICEYE 2024** (`ice_hist_2024.png`): counts concentrated in **January–July 2024**, with no activity in the late-year months where Umbra is present.
+
+Thus, even though `umbra_2024.png` and `iceye_2024.png` show **spatial** overlap in 2024, the month-by-month histograms demonstrate there is **no temporal overlap** between Umbra and ICEYE in 2024 for this region; a same-time intersection between these two missions in 2024 is not possible in the examined area.
+
 ---
 
 ## 2025 Fire Candidates Tested
