@@ -2,7 +2,7 @@
 
 ## Key Points (Summary)
 
-- **Umbra and ICEYE have no temporal intersection in the examined region**: ICEYE has 2024 records in Jan–Jul; Umbra has 2024 records in Sep–Dec and additional volume in 2025, so a same-time Umbra+ICEYE pairing is not achievable here.
+- **Umbra and ICEYE have no temporal intersection over the California region examined**: ICEYE has 2024 records in Jan–Jul; Umbra has 2024 records in Sep–Dec and additional volume in 2025, so a same-time Umbra+ICEYE pairing is not achievable there.
 - **No single fire/date in the examined region has Planet + Satellogic + Umbra + ICEYE + Landsat coverage.**
 - **2024 fires tested (including the large PARK fire)**: Planet and Landsat have strong coverage; Umbra, ICEYE, and Satellogic all return **0** scenes over the tested AOIs/date windows.
 - **2025 SoCal fires tested (PALISADES, EATON, HUGHES)**: Planet and Umbra have multiple scenes; ICEYE and Satellogic return **0** scenes.
