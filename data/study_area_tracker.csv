@@ -1,7 +1,4 @@
 fire_name,fire_year,alarm_date,bbox_wgs84,planet_item_id,planet_date,satellogic_item_id,satellogic_date,umbra_item_id,umbra_date,iceye_item_id,iceye_date,landsat_id,landsat_date,notes
-BRIDGE,2024,2024-09-08,"-117.7965,34.1987,-117.6190,34.4219",,,,,,,,,,,
-LINE,2024,2024-09-06,"-117.1851,34.0921,-116.9398,34.2177",,,,,,,,,,,
-AIRPORT,2024,2024-09-09,"-117.5707,33.6174,-117.3867,33.7280",,,,,,,,,,,
 PALISADES,2025,2025-01-07,"-118.6859,34.0298,-118.5006,34.1294",,,,,,,,,,,"Prioritize 2025 for Umbra+Satellogic intersection per availability histograms."
 EATON,2025,2025-01-08,"-118.1621,34.1619,-118.0131,34.2378",,,,,,,,,,,"Prioritize 2025 for Umbra+Satellogic intersection per availability histograms."
 HUGHES,2025,2025-01-22,"-118.6269,34.4754,-118.5402,34.5814",,,,,,,,,,,"Prioritize 2025 for Umbra+Satellogic intersection per availability histograms."
