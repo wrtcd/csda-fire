@@ -80,14 +80,15 @@ In all 2025 tests, Planet and Umbra showed archive coverage; ICEYE and Satellogi
 
 ### Per-candidate availability
 
-| Fire (year)        | Planet | Landsat | Umbra | ICEYE | Satellogic | Notes                                      |
-|--------------------|--------|---------|-------|-------|------------|--------------------------------------------|
-| BRIDGE (2024)      | Yes    | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
-| LINE (2024)        | Yes    | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
-| AIRPORT (2024)     | Yes    | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
-| PALISADES (2025)   | Yes    | Expected| ≈30   | 0     | 0          | Partial: Planet + Umbra                    |
-| EATON (2025)       | Yes    | Expected| ≈36   | 0     | 0          | Partial: Planet + Umbra                    |
-| HUGHES (2025)      | Yes    | Expected| ≈6    | 0     | 0          | Partial: Planet + Umbra                    |
+| Fire (year)        | Planet        | Landsat | Umbra | ICEYE | Satellogic | Notes                                      |
+|--------------------|--------------|---------|-------|-------|------------|--------------------------------------------|
+| PARK (2024)        | 63 scenes    | 6 scenes| 0     | 0     | 0          | Large 2024 fire, rejected                  |
+| BRIDGE (2024)      | Yes          | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
+| LINE (2024)        | Yes          | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
+| AIRPORT (2024)     | Yes          | Yes     | 0     | 0     | 0          | SoCal corridor, rejected                   |
+| PALISADES (2025)   | Yes          | Expected| ≈30   | 0     | 0          | Partial: Planet + Umbra                    |
+| EATON (2025)       | Yes          | Expected| ≈36   | 0     | 0          | Partial: Planet + Umbra                    |
+| HUGHES (2025)      | Yes          | Expected| ≈6    | 0     | 0          | Partial: Planet + Umbra                    |
 
 ### Overall
 
