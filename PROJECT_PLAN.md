@@ -63,6 +63,32 @@ A candidate is “ready” when `study_area_tracker.csv` has one row where:
 
 ---
 
+## What We Tried in 2024 (and Why We Pivoted)
+
+Before adopting the 2025-first heuristic, several 2024 fires near the Central Valley / SoCal corridor were tested:
+
+- **BRIDGE (2024-09-08)** — bbox `-117.7965,34.1987,-117.6190,34.4219`
+- **LINE (2024-09-06)** — bbox `-117.1851,34.0921,-116.9398,34.2177`
+- **AIRPORT (2024-09-09)** — bbox `-117.5707,33.6174,-117.3867,33.7280`
+
+For each fire, CSDAP searches were run with:
+
+- AOI = fire bbox (plus small padding in some tests)
+- Time window ≈ alarm_date → alarm_date + 30 days (and extended to 60–90 days in follow-ups)
+
+**Observed availability (qualitative):**
+
+- **Planet** and **Landsat**: multiple post-fire scenes for each candidate.
+- **Umbra / ICEYE / Satellogic**: consistently **0 results**, even when:
+  - The AOI was expanded to include nearby high-count tiles.
+  - The time window was widened beyond the immediate post-fire period.
+
+Combined with the per-year histograms in `data/data_availability/`, this led to the conclusion that **2024 fires are poor intersection candidates given current CSDA holdings and filters**, and motivated the pivot to **2025 fires (PALISADES, EATON, HUGHES)** as the primary shortlist.
+
+These 2024 results remain useful as negative evidence and should be referenced in any final report describing the search strategy and constraints.
+
+---
+
 ## Groundwork Checklist (Before Full Credentials)
 
 - [ ] **CAL FIRE data**: Download shapefile from [California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all) (or [California Open Data](https://data.ca.gov/dataset/cal-fire)) and run `scripts/rank_fires.py` to get a candidate list.
