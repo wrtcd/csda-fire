@@ -33,6 +33,16 @@ This project uses one workflow end-to-end: **shortlist candidate fires first**, 
 - A single-shot selection strategy wastes time if one source is missing.
 - A pure catalog strategy is blocked by limited footprint visibility and current credential constraints.
 
+### Availability-driven year heuristic (important)
+
+The intersection step is limited by the *scarcest* sources. Based on CSDA “records over time” histograms captured in `data/data_availability/`:
+
+- **Umbra** and **Satellogic** density is heavily concentrated in **2025** (much lower in 2024).
+- **ICEYE** density is strongest in **2023–2024**, but still has some **2025** coverage.
+- **Planet** is abundant and rarely limiting.
+
+**Practical consequence**: start intersection scouting with **2025 fires** first (to satisfy Umbra + Satellogic), then confirm ICEYE and Landsat for the same/closest day.
+
 ### Hybrid workflow (the only workflow used)
 
 1. **Shortlist fires from CAL FIRE** (recent + large): use `scripts/rank_fires.py` to generate candidates with fire name, year, acres, alarm/control date (if present), and a WGS84 bbox.

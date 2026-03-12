@@ -10,7 +10,7 @@
 - Map shows availability **by tile**, not by **image footprint** → hard to see exact spatial extent.
 - Thumbnail and metadata (e.g. JSON) may be available when clicking an asset — use to confirm date and coverage.
 - Copy **item ID to clipboard** and **toggle layer on map** to see which tiles overlap your fire; use this to infer overlap between sources.
-- Download may require elevated credentials (waiting on boss).
+- Some collections may appear “available” at tile level but still return zero results for specific AOIs/time windows; use a small-AOI sanity check inside a high-count tile to distinguish coverage vs query/filter issues.
 
 ### Workflow until you have download access
 
@@ -19,6 +19,15 @@
 3. For each source (Planet, Satellogic, Umbra, ICEYE): copy item ID to clipboard, toggle layer, note date; paste ID and date into tracker.
 4. In GEE: same bbox/date → get Landsat scene ID → add to tracker.
 5. Pick the fire/date row where all 5 sources have IDs and imagery looks good.
+
+### Availability-by-year heuristic
+
+Histograms and tile screenshots in `data/data_availability/` suggest:
+
+- **Umbra** and **Satellogic** have much higher archive density in **2025** than 2024.
+- **ICEYE** is strongest in **2023–2024**, but still has some 2025 coverage.
+
+If you’re trying to satisfy all 5 sources, start testing **2025 fires first**, then widen/relax as needed.
 
 ### Metadata / JSON
 

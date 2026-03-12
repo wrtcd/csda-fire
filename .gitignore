@@ -9,6 +9,11 @@ data/*.dbf
 data/*.prj
 data/*.cpg
 data/*.geojson
+data/calfire_perimeters/
+data/calfire_perimeters/**
+
+# Generated outputs
+data/candidate_fires_ranked.csv
 
 # Python caches
 __pycache__/
