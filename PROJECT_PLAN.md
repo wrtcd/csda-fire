@@ -33,15 +33,17 @@ This project uses one workflow end-to-end: **shortlist candidate fires first**, 
 - A single-shot selection strategy wastes time if one source is missing.
 - A pure catalog strategy is blocked by limited footprint visibility and current credential constraints.
 
-### Availability-driven year heuristic (important)
+### Availability-driven heuristic (important)
 
-The intersection step is limited by the *scarcest* sources. Based on CSDA “records over time” histograms captured in `data/data_availability/`:
+The intersection step is limited by the *scarcest* sources. Based on CSDA “records over time” histograms and 2024-only histograms captured in `data/data_availability/`:
 
-- **Umbra** and **Satellogic** density is heavily concentrated in **2025** (much lower in 2024).
-- **ICEYE** density is strongest in **2023–2024**, but still has some **2025** coverage.
+- **Umbra** density is concentrated in **late 2024 (Sep–Dec)** and **2025**.
+- **ICEYE** density is strongest in **2019–2024**, with **no 2025 entries** visible in the examined California catalogs.
+- Within **2024**, ICEYE scenes occur in **Jan–Jul**, while Umbra scenes occur in **Sep–Dec** → there is **no temporal overlap** between Umbra and ICEYE in 2024 for this region.
+- **Satellogic** scenes for 2025 over California are effectively limited to **Nov–Dec 2025** (plus a small January contribution).
 - **Planet** is abundant and rarely limiting.
 
-**Practical consequence**: start intersection scouting with **2025 fires** first (to satisfy Umbra + Satellogic), then confirm ICEYE and Landsat for the same/closest day.
+**Practical consequence**: in this California analysis there is **no year/month window where Umbra, ICEYE, and Satellogic all overlap in time**, so a true five-mission intersection (Planet + Satellogic + Umbra + ICEYE + Landsat) is not achievable with the currently accessible CSDA archives.
 
 ### Hybrid workflow (the only workflow used)
 
