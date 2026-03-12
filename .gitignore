@@ -14,3 +14,6 @@ data/*.geojson
 __pycache__/
 *.pyc
 
+# Virtual environments
+.venv/
+
