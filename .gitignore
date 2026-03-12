@@ -1,0 +1,16 @@
+# Local GIS project files
+*.qgz
+*.qgs
+
+# Downloaded CAL FIRE perimeter files (keep repo lightweight)
+data/*.shp
+data/*.shx
+data/*.dbf
+data/*.prj
+data/*.cpg
+data/*.geojson
+
+# Python caches
+__pycache__/
+*.pyc
+

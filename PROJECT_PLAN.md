@@ -23,21 +23,33 @@ Create a **single, self-contained PowerPoint slide** that is aesthetically pleas
 
 ---
 
-## Approach: Hybrid (Top-Down + Bottom-Up)
+## Core Method: Hybrid Shortlist → Intersection (Fundamental)
 
-| Approach | Pros | Cons |
-|----------|------|------|
-| **Top-down** | Pick a famous/large fire → get perimeter/date → search each source. | Risk: no overlap for that fire. |
-| **Bottom-up** | Get catalogs per source → find overlapping areas/dates → match to CAL FIRE. | Needs catalog/API access; CSDAP doesn’t expose footprints easily. |
+This project uses one workflow end-to-end: **shortlist candidate fires first**, then **find cross-source imagery intersections** for each candidate until one fire/date satisfies the 5-source requirement.
 
-**Recommended: hybrid**
+### Why this is fundamental
 
-1. **Shortlist fires** from CAL FIRE (script in this repo): sort by **year** (e.g. recent) and **area** (large = more likely visible and interesting). Export a small list of candidate fires with name, date, bbox, acreage.
-2. **For each candidate**: note fire name, alarm/control dates, bounding box (for CSDAP/GEE search). When you have credentials, search each source by **location + date** and record **image IDs** in the tracker (see `data/study_area_tracker.csv`).
-3. **Overlap check**: Use CSDAP “copy item ID to clipboard” and “visually toggle layer on map” to see which tiles/layers overlap; use GEE for Landsat over the same bbox/date to confirm Landsat availability.
-4. **Pick the best site** where all 5 sources have at least one image (same day or closest day) and the scene looks good.
+- The primary risk is **multi-source intersection** (Planet + Satellogic + Umbra + ICEYE + Landsat).
+- A single-shot selection strategy wastes time if one source is missing.
+- A pure catalog strategy is blocked by limited footprint visibility and current credential constraints.
 
-This way you **constrain the problem** (few candidate fires) and **fill in the matrix** (which image IDs per source) as access becomes available.
+### Hybrid workflow (the only workflow used)
+
+1. **Shortlist fires from CAL FIRE** (recent + large): use `scripts/rank_fires.py` to generate candidates with fire name, year, acres, alarm/control date (if present), and a WGS84 bbox.
+2. **Choose 2–3 candidates (not 1)** and add them to `data/study_area_tracker.csv`.
+3. **Lock a target post-fire date window**: aim for the same day across sources; otherwise use the closest available date(s) within a defined tolerance.
+4. **Populate the 5-source matrix** for each candidate:
+   - **Landsat** via GEE (scene ID + date)
+   - **Planet / Satellogic / Umbra / ICEYE** via CSDAP (item ID + date + overlap evidence)
+5. **Select the winner row**: the candidate with all 5 sources present and the strongest visual story, then produce the slide.
+
+### Exit criteria for selection
+
+A candidate is “ready” when `study_area_tracker.csv` has one row where:
+
+- The fire perimeter and bbox are finalized (map extent locked).
+- One image ID per source is recorded (or explicitly marked “closest date”).
+- Dates are documented so the slide can state “same day” or “closest available day”.
 
 ---
 
