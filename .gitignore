@@ -5,6 +5,7 @@
 # Data files (large — do not push to avoid timeout)
 data/data_availability/*.geojson
 data/data_availability/*.csv
+data/data_availability/*.json
 data/data_availability/*.png
 data/data_availability/*.PNG
 data/data_availability/*.md

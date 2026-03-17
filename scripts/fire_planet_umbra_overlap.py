@@ -14,7 +14,8 @@ Run after fetching footprints:
   python scripts/fire_planet_umbra_overlap.py
 
 Output: data/data_availability/fire_planet_umbra_overlap.csv
-        fire_name, alarm_date, cont_date, imagery_date, bbox
+        fire_name, alarm_date, cont_date, imagery_date, bbox, planet_dates, umbra_dates
+        (planet_dates and umbra_dates are semicolon-separated YYYY-MM-DD for scenes intersecting the fire)
 """
 
 from __future__ import annotations
@@ -35,7 +36,7 @@ DATA = BASE / "data"
 DATA_AVAIL = BASE / "data" / "data_availability"
 CALFIRE_SHP = DATA / "cal fire" / "California_Fire_Perimeters_(all).shp"
 
-# Only 2024 and 2025
+# Only 2024 and 2025. Umbra footprints are late 2024–2025; ICEYE ends early 2024 (no overlap). See csdap_planet_umbra_footprints.py.
 YEAR_MIN = 2024
 YEAR_MAX = 2025
 # Planet and Umbra can be on different days; allow up to this many days apart (e.g. 7 = within a week)
@@ -52,6 +53,25 @@ def _date_str(d) -> str:
     if hasattr(d, "strftime"):
         return d.strftime("%Y-%m-%d")
     return str(d)[:10]
+
+
+def _dates_intersecting_fire(g, gdf, date_col: str = "_date") -> str:
+    """Return semicolon-separated sorted unique dates from gdf for geometries intersecting g."""
+    if g is None or g.is_empty or gdf.empty:
+        return ""
+    try:
+        candidates = list(gdf.sindex.intersection(g.bounds))
+    except Exception:
+        candidates = range(len(gdf))
+    dates = set()
+    for i in candidates:
+        if i >= len(gdf):
+            continue
+        if gdf.geometry.iloc[i].intersects(g):
+            d = gdf[date_col].iloc[i]
+            if d and len(str(d)) >= 10:
+                dates.add(str(d)[:10])
+    return ";".join(sorted(dates)) if dates else ""
 
 
 def main() -> None:
@@ -175,6 +195,8 @@ def main() -> None:
             cont = _date_str(row.get(cont_col))
             bbox = geom.bounds if hasattr(geom, "bounds") else None
             bbox_s = ",".join(f"{x:.4f}" for x in bbox) if bbox and len(bbox) >= 4 else ""
+            planet_dates_s = _dates_intersecting_fire(g, planet)
+            umbra_dates_s = _dates_intersecting_fire(g, umbra)
 
             results.append({
                 "fire_name": name,
@@ -182,6 +204,8 @@ def main() -> None:
                 "cont_date": cont,
                 "imagery_date": pdate,
                 "bbox": bbox_s,
+                "planet_dates": planet_dates_s,
+                "umbra_dates": umbra_dates_s,
             })
 
     # If strict overlap found nothing, still give a usable table: fires that intersect both
@@ -202,15 +226,20 @@ def main() -> None:
             cont = _date_str(row.get(cont_col))
             bbox = geom.bounds if hasattr(geom, "bounds") else None
             bbox_s = ",".join(f"{x:.4f}" for x in bbox) if bbox and len(bbox) >= 4 else ""
+            g = fire_geom_for_intersect(geom)
+            planet_dates_s = _dates_intersecting_fire(g, planet)
+            umbra_dates_s = _dates_intersecting_fire(g, umbra)
             results.append({
                 "fire_name": name,
                 "alarm_date": alarm,
                 "cont_date": cont,
                 "imagery_date": suggested_range,
                 "bbox": bbox_s,
+                "planet_dates": planet_dates_s,
+                "umbra_dates": umbra_dates_s,
             })
 
-    fieldnames = ["fire_name", "alarm_date", "cont_date", "imagery_date", "bbox"]
+    fieldnames = ["fire_name", "alarm_date", "cont_date", "imagery_date", "bbox", "planet_dates", "umbra_dates"]
     out = DATA_AVAIL / "fire_planet_umbra_overlap.csv"
     DATA_AVAIL.mkdir(parents=True, exist_ok=True)
     with open(out, "w", newline="", encoding="utf-8") as f:
