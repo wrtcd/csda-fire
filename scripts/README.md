@@ -21,3 +21,12 @@ Run after step 1: `python scripts/fire_planet_umbra_overlap.py`
 - `python scripts/rank_fire_planet_umbra.py --fire EATON --alarm 2025-01-08` — list dates for one fire
 
 See `docs/FIND_PLANET_UMBRA_FIRE.md` for the full workflow.
+
+## 4. Best post-burn scar from Satellogic (CONUS)
+
+**`rank_postburn_satellogic_conus.py`** — Pulls **CSDA Satellogic** footprints over CONUS, computes **temporal availability**, joins to **WFIGS fire perimeters**, and ranks the best **post-burn** candidates. Also writes a small text snippet you can paste into `gee_landsat_s2_export.js` to verify quickly in GEE with Landsat + Sentinel-2.
+
+Run:
+
+- `pip install -r requirements.txt`
+- `python scripts/rank_postburn_satellogic_conus.py`

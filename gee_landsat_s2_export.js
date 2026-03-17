@@ -1,5 +1,7 @@
 // GEE: export Landsat and Sentinel-2 scenes for an AOI. Run in Code Editor.
 // Preset below is set to DRAGON BRAVO (AZ) by default. You can swap AOI_BBOX + dates for any other fire.
+// Tip (ICEYE verification): set AOI_BBOX to the ICEYE item bbox (or a slightly expanded bbox), then use
+// PRE window before ignition and POST window after containment. Use dNBR layers below to verify burn scar.
 
 var SCENE_LABEL = 'dragon_bravo';
 
@@ -42,6 +44,20 @@ function getS2Col(startDate, endDate) {
 // Scale Landsat L2 reflectance: 0.0000275, offset -0.2
 function scaleL2(img) {
   return img.select(['SR_B4', 'SR_B3', 'SR_B2']).multiply(0.0000275).add(-0.2).clamp(0, 1);
+}
+
+function landsatNBR(img) {
+  // NBR = (NIR - SWIR2) / (NIR + SWIR2) using Landsat C2 L2 bands.
+  var nir = img.select('SR_B5').multiply(0.0000275).add(-0.2);
+  var swir2 = img.select('SR_B7').multiply(0.0000275).add(-0.2);
+  return nir.subtract(swir2).divide(nir.add(swir2)).rename('NBR');
+}
+
+function s2NBR(img) {
+  // NBR = (NIR - SWIR2) / (NIR + SWIR2) using Sentinel-2 SR bands.
+  var nir = img.select('B8').multiply(0.0001);
+  var swir2 = img.select('B12').multiply(0.0001);
+  return nir.subtract(swir2).divide(nir.add(swir2)).rename('NBR');
 }
 
 function addTopNAsLayers(col, n, labelPrefix, viz, mapperFn) {
@@ -99,6 +115,14 @@ Map.addLayer(scaleL2(landsatPreChosen), { min: 0, max: 0.3 }, 'Chosen Landsat PR
 Map.addLayer(scaleL2(landsatPostChosen), { min: 0, max: 0.3 }, 'Chosen Landsat POST', true);
 Map.addLayer(s2PreChosen.select(['B4', 'B3', 'B2']), { min: 0, max: 3000 }, 'Chosen S2 PRE', false);
 Map.addLayer(s2PostChosen.select(['B4', 'B3', 'B2']), { min: 0, max: 3000 }, 'Chosen S2 POST', true);
+
+// Burn-scar verification: dNBR (pre - post). Higher values generally indicate burned areas.
+var landsat_dNBR = landsatNBR(landsatPreChosen).subtract(landsatNBR(landsatPostChosen)).rename('dNBR');
+var s2_dNBR = s2NBR(s2PreChosen).subtract(s2NBR(s2PostChosen)).rename('dNBR');
+
+var dNBR_viz = { min: -0.1, max: 0.8, palette: ['#1a9850', '#91cf60', '#d9ef8b', '#fee08b', '#fc8d59', '#d73027'] };
+Map.addLayer(landsat_dNBR, dNBR_viz, 'Landsat dNBR (PRE-POST)', true);
+Map.addLayer(s2_dNBR, dNBR_viz, 'S2 dNBR (PRE-POST)', false);
 
 Map.centerObject(aoi, 10);
 Map.addLayer(aoi, { color: 'red' }, 'AOI');

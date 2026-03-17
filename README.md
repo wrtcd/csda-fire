@@ -8,3 +8,4 @@
 - **`data/data_availability/`** — Planet/Umbra (and ICEYE/Satellogic) footprints and **`fire_planet_umbra_overlap.csv`** = CAL FIRE fires with Planet+Umbra in same place and time (2024–2025)
 - **Scripts:** `scripts/csdap_planet_umbra_footprints.py` (fetch footprints); `scripts/fire_planet_umbra_overlap.py` (overlap table); `scripts/rank_fire_planet_umbra.py` (rank fires, optional `--list-dates` or `--fire NAME --alarm DATE`)
 - **GEE:** Adapt `gee_landsat_s2_export.js` for your fire’s bbox/date.
+- **GEE picker (Satellogic-aligned):** Use `gee_picker_landsat_s2_satellogic.js` to paste a **CSDA Satellogic bbox + acquisition time** and auto-pick the best **Landsat + Sentinel-2** scenes around it for quick post-burn verification.
