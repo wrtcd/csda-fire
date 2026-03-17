@@ -9,15 +9,18 @@ Exports GeoJSON and CSV so you can overlay with CAL FIRE in QGIS and find multi-
 Usage:
   pip install pystac-client
   python scripts/csdap_planet_umbra_footprints.py
+  python scripts/csdap_planet_umbra_footprints.py --preset conus --collections iceye --tag us
+  python scripts/csdap_planet_umbra_footprints.py --bbox -103.5 35.0 -99.5 37.5 --collections iceye --datetime 2024-02-15/2024-03-31 --tag smokehouse
 
 Outputs (in data/data_availability/):
-  - planet_footprints_ca.geojson, umbra_footprints_ca.geojson, iceye_*, satellogic_*
+  - planet_footprints_<tag>.geojson, umbra_footprints_<tag>.geojson, iceye_*, satellogic_*
   - collection_temporal_extent.json — start/end dates per collection (from API or fallback)
   - Corresponding .csv files (id, datetime, bbox) for each.
 """
 
 from __future__ import annotations
 
+import argparse
 import csv
 import json
 import sys
@@ -30,8 +33,10 @@ except ImportError:
     print("Install pystac-client: pip install pystac-client", file=sys.stderr)
     sys.exit(1)
 
-# California bbox (min_lon, min_lat, max_lon, max_lat) — expand if you want more
+# Default bbox (California) (min_lon, min_lat, max_lon, max_lat)
 CA_BBOX = [-124.5, 32.5, -114.0, 42.0]
+# Continental US (rough) (CONUS)
+CONUS_BBOX = [-125.0, 24.0, -66.0, 49.5]
 STAC_URL = "https://csdap.earthdata.nasa.gov/stac/"
 OUT_DIR = Path(__file__).resolve().parent.parent / "data" / "data_availability"
 
@@ -168,17 +173,55 @@ def to_csv(features: list[dict], path: Path) -> None:
             w.writerow([row["id"], row["datetime"]] + (bbox if len(bbox) >= 4 else ["", "", "", ""]))
 
 
+def parse_args() -> argparse.Namespace:
+    p = argparse.ArgumentParser(description="Fetch STAC item footprints to GeoJSON/CSV.")
+    p.add_argument(
+        "--bbox",
+        nargs=4,
+        type=float,
+        metavar=("MIN_LON", "MIN_LAT", "MAX_LON", "MAX_LAT"),
+        help="Search bbox in EPSG:4326 (west south east north). Overrides --preset.",
+    )
+    p.add_argument(
+        "--preset",
+        choices=["ca", "conus"],
+        default="ca",
+        help="Convenience bbox preset (default: ca).",
+    )
+    p.add_argument(
+        "--tag",
+        default=None,
+        help="Output tag used in filenames (default: preset name).",
+    )
+    p.add_argument(
+        "--collections",
+        default="planet,umbra,iceye,satellogic",
+        help="Comma-separated collections to fetch (default: all). Example: iceye",
+    )
+    p.add_argument(
+        "--datetime",
+        default=None,
+        help="Optional STAC datetime range override (YYYY-MM-DD/YYYY-MM-DD). If omitted, uses collection extents/fallbacks.",
+    )
+    return p.parse_args()
+
+
 def main() -> None:
+    args = parse_args()
     out_dir = OUT_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
 
     print("Fetching collection temporal extents from CSDAP STAC API...")
-    collection_ids = ["planet", "umbra", "iceye", "satellogic"]
+    requested = [c.strip() for c in str(args.collections).split(",") if c.strip()]
+    collection_ids = requested
     extent_records: dict[str, dict] = {}
     collection_config: list[tuple[str, str, str]] = []  # (id, display_name, date_range)
 
     for collection_id in collection_ids:
-        date_range, info = date_range_from_extent(collection_id)
+        if args.datetime:
+            date_range, info = args.datetime, {"start": None, "end": None, "source": "cli"}
+        else:
+            date_range, info = date_range_from_extent(collection_id)
         extent_records[collection_id] = info
         name = collection_id.capitalize()
         collection_config.append((collection_id, name, date_range))
@@ -190,29 +233,40 @@ def main() -> None:
     print(f"  wrote {extent_path}\n")
 
     print("Searching CSDAP STAC (no auth required)...")
-    print(f"  bbox: {CA_BBOX}")
+    if args.bbox:
+        search_bbox = list(args.bbox)
+        preset_name = "custom"
+    else:
+        if args.preset == "conus":
+            search_bbox = CONUS_BBOX
+            preset_name = "conus"
+        else:
+            search_bbox = CA_BBOX
+            preset_name = "ca"
+    tag = args.tag or preset_name
+    print(f"  bbox: {search_bbox} (tag: {tag})")
     print("  Slide priority: 6 (all) > 5 (e.g. Planet+Umbra+ICEYE+Landsat+Sentinel) > 4 (Planet+Umbra+Landsat+Sentinel). Landsat+Sentinel always available.")
 
     for collection, name, date_range in collection_config:
         print(f"\n{name} ({date_range})...")
         try:
             if collection == "planet":
-                features = fetch_planet_footprints_chunked(CA_BBOX)
+                features = fetch_planet_footprints_chunked(search_bbox)
                 print(f"  found {len(features)} items (merged from date chunks)")
             else:
-                features = fetch_footprints(collection, CA_BBOX, date_range)
+                features = fetch_footprints(collection, search_bbox, date_range)
                 print(f"  found {len(features)} items")
         except Exception as e:
             print(f"  error: {e}")
             continue
 
         geojson = to_geojson(features, collection)
-        geojson_path = out_dir / f"{collection}_footprints_ca.geojson"
+        geojson_path = out_dir / f"{collection}_footprints_{tag}.geojson"
         with geojson_path.open("w", encoding="utf-8") as f:
             json.dump(geojson, f, indent=2)
         print(f"  wrote {geojson_path}")
 
-        csv_path = out_dir / f"{collection}_footprints_ca.csv"
+        csv_path = out_dir / f"{collection}_footprints_{tag}.csv"
         to_csv(features, csv_path)
         print(f"  wrote {csv_path}")
 
