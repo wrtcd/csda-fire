@@ -1,10 +1,10 @@
 # CSDA Fire Product
 
-**Goal:** One slide — fire perimeter + post-fire imagery from **Planet + Umbra + Landsat + Sentinel**. Use a **fire where all four have coverage**.
+**Goal:** One slide — fire perimeter + post-fire imagery from **Planet + Umbra + Landsat + Sentinel** (and optionally Satellogic, ICEYE). Use a **fire where multiple sources have coverage**.
 
-- **[OVERVIEW.md](OVERVIEW.md)** — goal and plan
-- **[TODO.md](TODO.md)** — next steps (includes California slide checklist)
-- **`docs/FIND_PLANET_UMBRA_FIRE.md`** — how to find the Planet + CAL FIRE + Umbra intersection (QGIS + candidate list)
-- **`data/data_availability/`** — Planet/Umbra footprints (GeoJSON/CSV) and **`fire_planet_umbra_overlap.csv`** = CAL FIRE fires with Planet+Umbra in same place and time (2024–2025)
-- **Scripts:** `scripts/csdap_planet_umbra_footprints.py` (fetch footprints); `scripts/fire_planet_umbra_overlap.py` (overlap table); `scripts/rank_fire_planet_umbra.py` (rank fires, optional `--list-dates` or `--fire NAME --alarm DATE`)
-- **GEE:** Adapt `gee_landsat_s2_export.js` for your fire’s bbox/date.
+- **Map**: QGIS (perimeter + CA/US inset). **Fire data**: [California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all).
+- **Imagery**: [CSDAP](https://csdap.earthdata.nasa.gov/explore/) + Google Earth Engine (Landsat, Sentinel-2).
+- **[OVERVIEW.md](OVERVIEW.md)** — goal and plan | **[TODO.md](TODO.md)** — next steps
+- **[PROJECT_PLAN.md](PROJECT_PLAN.md)** — hybrid shortlist → intersection workflow. Use **`data/study_area_tracker.csv`** to record candidate fires and image IDs per source.
+- **`docs/FIND_PLANET_UMBRA_FIRE.md`** — Planet + CAL FIRE + Umbra intersection (QGIS + candidate list). **`data/data_availability/`** — footprints and **`fire_planet_umbra_overlap.csv`**.
+- **Scripts:** `scripts/csdap_planet_umbra_footprints.py`, `scripts/fire_planet_umbra_overlap.py`, `scripts/rank_fire_planet_umbra.py` (optional `--list-dates` or `--fire NAME --alarm DATE`). **GEE:** Adapt `gee_landsat_s2_export.js` for your fire's bbox/date.
