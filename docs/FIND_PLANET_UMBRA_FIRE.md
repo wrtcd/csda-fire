@@ -1,0 +1,72 @@
+# Find a CAL FIRE fire with Planet and Umbra (spatial + temporal)
+
+We only use **2024 and 2025**: both the **imagery** (Planet/Umbra scenes) and the **fires** (CAL FIRE alarm or containment date must be in 2024 or 2025). No STATION (2009), BOBCAT (2020), or other older fires — only recent fires. You need a fire where **Planet** and **Umbra** both have imagery **at the same place**. Their acquisition dates can be **the same or close** (within a week is acceptable; same day is not required).
+
+**Footprints:** The script uses the **original scene footprints** from STAC (polygon outline of each image on the ground). The GeoJSON features are `"type": "Polygon"` — the coordinates are the polygon vertices, not centroids. Overlap is **fire polygon intersects footprint polygon**. An optional small buffer (default 0.01°) is applied to the fire geometry so near-miss edges still count; you can set `FIRE_BUFFER_DEGREES = 0` in the script to disable it.
+
+---
+
+## Steps
+
+**1. Fetch Planet and Umbra footprints (2024–2025 only)**
+
+```text
+python scripts/csdap_planet_umbra_footprints.py
+```
+(script: [csdap_planet_umbra_footprints.py](../scripts/csdap_planet_umbra_footprints.py))
+
+This writes [planet_footprints_ca.geojson](../data/data_availability/planet_footprints_ca.geojson), [umbra_footprints_ca.geojson](../data/data_availability/umbra_footprints_ca.geojson) (and CSVs) in [data/data_availability/](../data/data_availability/) for California, date range 2024-01-01 to 2025-12-31.
+
+**2. Build the overlap table**
+
+```text
+python scripts/fire_planet_umbra_overlap.py
+```
+(script: [fire_planet_umbra_overlap.py](../scripts/fire_planet_umbra_overlap.py))
+
+The script:
+
+- Keeps only footprint scenes in **2024 and 2025**, and only **CAL FIRE fires whose alarm or containment date is 2024 or 2025**.
+- Finds dates when **both** Planet and Umbra have at least one scene.
+- For each Planet scene date, looks for Umbra scenes within **±7 days** (same date not required). Finds CAL FIRE fires that **intersect** both (spatial + temporal: dates can be a few days apart).
+- Writes **[fire_planet_umbra_overlap.csv](../data/data_availability/fire_planet_umbra_overlap.csv)**.
+
+**3. (Optional) Rank by probability for manual inspection**
+
+To inspect in a sane order (highest chance of Planet + Umbra first), run:
+
+```text
+python scripts/rank_fire_planet_umbra.py
+```
+(script: [rank_fire_planet_umbra.py](../scripts/rank_fire_planet_umbra.py))
+
+This writes **[fire_planet_umbra_ranked.csv](../data/data_availability/fire_planet_umbra_ranked.csv)** (all candidates, ordered by score) and **[fire_planet_umbra_top10.csv](../data/data_availability/fire_planet_umbra_top10.csv)** (first 10). **Only 2024 and 2025 fires** are included (alarm or containment date in that year). Each row has: **rank**, **fire_name**, **alarm_date**, **cont_date**, **date_range**, **bbox**, **nw_lon**, **nw_lat**, **se_lon**, **se_lat**, **planet_count**, **umbra_count**. Run the script to see the current first 10; use **date_range** in CSDAP when searching.
+
+**4. Inspect the table**
+
+Open **[fire_planet_umbra_overlap.csv](../data/data_availability/fire_planet_umbra_overlap.csv)** (or the ranked/top10 CSVs above). Columns:
+
+| Column          | Meaning |
+|-----------------|--------|
+| fire_name       | CAL FIRE fire name |
+| alarm_date      | Alarm date |
+| cont_date       | Containment date |
+| imagery_date    | Planet scene date; Umbra can be within ±7 days of this date |
+| bbox            | min_lon, min_lat, max_lon, max_lat (for CSDAP / GEE) |
+
+The **ranked** CSV adds **nw_lon**, **nw_lat**, **se_lon**, **se_lat** (northwest and southeast corners) and **planet_count**, **umbra_count**.
+
+Each row is a fire that **coincides with available Planet and Umbra** (same place, same time window). Use one row’s **bbox** and **imagery_date** in CSDAP and GEE to pull Planet, Umbra, Landsat, and Sentinel for your slide.
+
+---
+
+## You always get a table — a California story is doable
+
+The script first looks for **strict** overlap: same fire, Planet and Umbra both covering it within 7 days. If that returns no rows (e.g. due to how dates line up in the footprint data), the script **still writes a table**: every CAL FIRE fire whose perimeter **intersects both** Planet and Umbra coverage (any date in 2024–2025). For those rows, **imagery_date** is a date range (e.g. `2024-01-01 to 2025-12-31`). Use [fire_planet_umbra_overlap.csv](../data/data_availability/fire_planet_umbra_overlap.csv):
+
+1. Pick a fire (e.g. EATON, LAKE, MOUNTAIN, FRANKLIN).
+2. In [CSDAP Explorer](https://csdap.earthdata.nasa.gov/explore/), search the fire’s **bbox** and a **date range** (e.g. one week or one month after the fire’s cont_date).
+3. Confirm Planet and Umbra both return scenes; pick specific scene dates for your slide.
+4. Use the same bbox and date in GEE for Landsat + Sentinel.
+
+So it is **not** impossible to show a California story — you get a list of candidate fires and verify in CSDAP. If the strict check ever finds rows, those are ready-to-use; otherwise the candidate list is your starting point.

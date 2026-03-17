@@ -1,0 +1,34 @@
+# Local GIS project files
+*.qgz
+*.qgs
+
+# Data files (large — do not push to avoid timeout)
+data/data_availability/*.geojson
+data/data_availability/*.csv
+data/data_availability/*.png
+data/data_availability/*.PNG
+data/data_availability/*.md
+data/cal fire/
+data/download/
+_old/
+
+# Downloaded CAL FIRE perimeter files (keep repo lightweight)
+data/*.shp
+data/*.shx
+data/*.dbf
+data/*.prj
+data/*.cpg
+data/*.geojson
+data/calfire_perimeters/
+data/calfire_perimeters/**
+
+# Generated outputs
+data/candidate_fires_ranked.csv
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+
