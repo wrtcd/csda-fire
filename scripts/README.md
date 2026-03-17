@@ -1,26 +1,23 @@
 # Scripts
 
-## 1. Planet + Umbra footprints (2024–2025)
+## 1. Footprints (2024–2025)
 
-**Script:** `csdap_planet_umbra_footprints.py`
+**`csdap_planet_umbra_footprints.py`** — Fetches Planet, Umbra, ICEYE, Satellogic footprints over California from the CSDAP STAC API. Writes GeoJSON + CSV under `data/data_availability/`.
 
-Fetches Planet and Umbra footprints over California from the CSDAP STAC API (date range **2024-01-01 to 2025-12-31**). Writes:
+Run: `pip install pystac-client` then `python scripts/csdap_planet_umbra_footprints.py`
 
-- `data/data_availability/planet_footprints_ca.geojson`, `umbra_footprints_ca.geojson`
-- `planet_footprints_ca.csv`, `umbra_footprints_ca.csv` (id, datetime, bbox)
+## 2. Overlap table
 
-**Run:** `pip install pystac-client` then `python scripts/csdap_planet_umbra_footprints.py`
+**`fire_planet_umbra_overlap.py`** — CAL FIRE fires that **spatially and temporally** coincide with Planet and Umbra (same place, within ±7 days). Writes `fire_planet_umbra_overlap.csv` (fire_name, alarm_date, cont_date, imagery_date, bbox).
 
----
+Run after step 1: `python scripts/fire_planet_umbra_overlap.py`
 
-## 2. CAL FIRE × Planet × Umbra overlap table
+## 3. Rank and list dates
 
-**Script:** `fire_planet_umbra_overlap.py`
+**`rank_fire_planet_umbra.py`** — Ranks fires by Planet/Umbra scene counts; optionally lists imagery dates.
 
-Finds CAL FIRE fires that **spatially and temporally** coincide with Planet and Umbra: same place, same date (or within a few days). Uses only 2024 and 2025 footprint data. Writes:
+- `python scripts/rank_fire_planet_umbra.py` — rank only (writes `fire_planet_umbra_ranked.csv`, `fire_planet_umbra_top10.csv`)
+- `python scripts/rank_fire_planet_umbra.py --list-dates` — rank + list dates for top 10 (also writes `fire_planet_umbra_ranked_with_dates.csv`)
+- `python scripts/rank_fire_planet_umbra.py --fire EATON --alarm 2025-01-08` — list dates for one fire
 
-- **`data/data_availability/fire_planet_umbra_overlap.csv`** — columns: `fire_name`, `alarm_date`, `cont_date`, `imagery_date`, `bbox`
-
-**Run:** After step 1, run `pip install geopandas` then `python scripts/fire_planet_umbra_overlap.py`
-
-**Use:** Open the CSV; pick a fire and use its `bbox` and `imagery_date` in CSDAP (Planet + Umbra) and GEE (Landsat + Sentinel). See `docs/FIND_PLANET_UMBRA_FIRE.md`.
+See `docs/FIND_PLANET_UMBRA_FIRE.md` for the full workflow.

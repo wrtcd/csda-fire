@@ -2,7 +2,7 @@
 
 **Goal:** One slide: fire perimeter map + post-fire imagery for the same place and time.
 
-- **California:** **Planet + Landsat + Sentinel** (and Umbra where it has coverage). **PALISADES:** Umbra has no coverage → use **Planet + Landsat + Sentinel** only. We have CSDA access.
+- **California:** **Planet + Landsat + Sentinel** (and Umbra where it has coverage). We have CSDA access.
 - **ICEYE and Satellogic** from CSDA are used elsewhere (e.g. Southeast / Alabama).
 
 ---

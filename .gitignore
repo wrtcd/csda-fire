@@ -10,6 +10,7 @@ data/data_availability/*.PNG
 data/data_availability/*.md
 data/cal fire/
 data/download/
+*.aux.xml
 _old/
 
 # Downloaded CAL FIRE perimeter files (keep repo lightweight)

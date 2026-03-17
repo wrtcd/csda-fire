@@ -31,16 +31,18 @@ The script:
 - For each Planet scene date, looks for Umbra scenes within **±7 days** (same date not required). Finds CAL FIRE fires that **intersect** both (spatial + temporal: dates can be a few days apart).
 - Writes **[fire_planet_umbra_overlap.csv](../data/data_availability/fire_planet_umbra_overlap.csv)**.
 
-**3. (Optional) Rank by probability for manual inspection**
+**3. (Optional) Rank and list imagery dates**
 
-To inspect in a sane order (highest chance of Planet + Umbra first), run:
+To rank by likelihood and optionally list which dates have Planet/Umbra coverage:
 
 ```text
-python scripts/rank_fire_planet_umbra.py
+python scripts/rank_fire_planet_umbra.py                    # rank only
+python scripts/rank_fire_planet_umbra.py --list-dates      # rank + list dates for top 10
+python scripts/rank_fire_planet_umbra.py --fire EATON --alarm 2025-01-08   # list dates for one fire
 ```
 (script: [rank_fire_planet_umbra.py](../scripts/rank_fire_planet_umbra.py))
 
-This writes **[fire_planet_umbra_ranked.csv](../data/data_availability/fire_planet_umbra_ranked.csv)** (all candidates, ordered by score) and **[fire_planet_umbra_top10.csv](../data/data_availability/fire_planet_umbra_top10.csv)** (first 10). **Only 2024 and 2025 fires** are included (alarm or containment date in that year). Each row has: **rank**, **fire_name**, **alarm_date**, **cont_date**, **date_range**, **bbox**, **nw_lon**, **nw_lat**, **se_lon**, **se_lat**, **planet_count**, **umbra_count**. Run the script to see the current first 10; use **date_range** in CSDAP when searching.
+This writes **fire_planet_umbra_ranked.csv** (all candidates, ordered by score), **fire_planet_umbra_top10.csv** (first 10), and with `--list-dates` or `--fire`/`--alarm` also **fire_planet_umbra_ranked_with_dates.csv** (includes planet_dates, umbra_dates). Use **date_range** in CSDAP when searching.
 
 **4. Inspect the table**
 
