@@ -21,3 +21,15 @@ Run after step 1: `python scripts/fire_planet_umbra_overlap.py`
 - `python scripts/rank_fire_planet_umbra.py --fire EATON --alarm 2025-01-08` — list dates for one fire
 
 See `docs/FIND_PLANET_UMBRA_FIRE.md` for the full workflow.
+
+## 4. Fires intersecting Satellogic or ICEYE (entire USA)
+
+**`find_fires_intersecting_satellogic.py`** — NIFC perimeters vs CSDAP footprints (spatial + temporal: scene within discovery+60d). **Satellogic** by default; **ICEYE** with `--collection iceye`.
+
+- **Satellogic:** `python scripts/find_fires_intersecting_satellogic.py`
+- **ICEYE:** `python scripts/find_fires_intersecting_iceye.py` (or same script `--collection iceye`)
+- **Both (runner):** `python scripts/run_find_fire_for_gee.py` — runs Satellogic then ICEYE.
+
+If **Satellogic + NIFC: NONE**, the script prints the exact **ICEYE** command next; no fake GEE paste unless `--sample-footprint`.
+
+Run: `pip install pystac-client geopandas`. See `docs/VERIFY_BURN_SATELLOGIC_LANDSAT_S2.md`.
