@@ -1,2 +1,2 @@
-# No external deps required for Python 3.5.
-# (Your current Python is 3.5.2; modern pip packages often no longer support it.)
+geopandas>=0.14.0
+pandas>=2.0.0

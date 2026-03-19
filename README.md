@@ -1,11 +1,11 @@
 # CSDA Fire Product
 
-**Goal:** One slide — fire perimeter + post-fire imagery. **Slide priority:** 6 (all) > 5 (e.g. Planet+Umbra+ICEYE+Landsat+Sentinel) > 4 (Planet+Umbra+Landsat+Sentinel). Landsat and Sentinel always available; Satellogic intersection may not be possible; Planet+Umbra+ICEYE OK; else Planet+Umbra OK. Footprints script fetches each collection’s start/end dates from the CSDAP STAC API and writes `collection_temporal_extent.json`.
+**Goal:** One slide — fire perimeter + post-fire imagery from **Planet + Umbra + Landsat + Sentinel** (and optionally Satellogic, ICEYE). Use a **fire where multiple sources have coverage**.
 
-- **[OVERVIEW.md](OVERVIEW.md)** — goal, CSDA temporal coverage, and plan
-- **[TODO.md](TODO.md)** — next steps (California slide checklist)
-- **`docs/FIND_PLANET_UMBRA_FIRE.md`** — how to find Planet + CAL FIRE + Umbra intersection (QGIS + candidate list)
-- **`data/data_availability/`** — Planet/Umbra (and ICEYE/Satellogic) footprints and **`fire_planet_umbra_overlap.csv`** = CAL FIRE fires with Planet+Umbra in same place and time (2024–2025)
-- **Scripts:** `scripts/csdap_planet_umbra_footprints.py` (fetch footprints); `scripts/fire_planet_umbra_overlap.py` (overlap table); `scripts/rank_fire_planet_umbra.py` (rank fires, optional `--list-dates` or `--fire NAME --alarm DATE`)
-- **GEE:** Adapt `gee_landsat_s2_export.js` for your fire’s bbox/date.
-- **GEE picker (Satellogic-aligned):** Use `gee_picker_landsat_s2_satellogic.js` to paste a **CSDA Satellogic bbox + acquisition time** and auto-pick the best **Landsat + Sentinel-2** scenes around it for quick post-burn verification.
+- **Map**: QGIS (perimeter + CA/US inset). **Fire data**: [California Fire Perimeters (all)](https://gis.data.ca.gov/datasets/CALFIRE-Forestry::california-fire-perimeters-all).
+- **Imagery**: [CSDAP](https://csdap.earthdata.nasa.gov/explore/) + Google Earth Engine (Landsat, Sentinel-2).
+- **[OVERVIEW.md](OVERVIEW.md)** — goal and plan | **[TODO.md](TODO.md)** — next steps
+- **[PROJECT_PLAN.md](PROJECT_PLAN.md)** — hybrid shortlist → intersection workflow. Use **`data/study_area_tracker.csv`** to record candidate fires and image IDs per source.
+- **`docs/FIND_PLANET_UMBRA_FIRE.md`** — Planet + CAL FIRE + Umbra intersection (QGIS + candidate list). **`data/data_availability/`** — footprints and **`fire_planet_umbra_overlap.csv`**.
+- **Scripts:** `scripts/csdap_planet_umbra_footprints.py`, `scripts/fire_planet_umbra_overlap.py`, `scripts/rank_fire_planet_umbra.py` (optional `--list-dates` or `--fire NAME --alarm DATE`). **GEE:** `gee_landsat_s2_export.js` (export L+S2 for a fire); **`gee_verify_burn_area_landsat_s2.js`** (verify Landsat + Sentinel-2 over any US burn area; use with Satellogic check in CSDAP — see **[docs/VERIFY_BURN_SATELLOGIC_LANDSAT_S2.md](docs/VERIFY_BURN_SATELLOGIC_LANDSAT_S2.md)**).
+- **Workflow report (Satellogic / ICEYE / NIFC / GEE):** **[docs/REPORT_SATELLOGIC_ICEYE_NIFC_GEE.md](docs/REPORT_SATELLOGIC_ICEYE_NIFC_GEE.md)** — what was built, how matching works, observed results, next steps.
