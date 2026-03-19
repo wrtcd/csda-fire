@@ -2,7 +2,7 @@
 
 ## 1. Footprints (2024–2025)
 
-**`csdap_planet_umbra_footprints.py`** — Fetches Planet, Umbra, ICEYE, Satellogic footprints over California from the CSDAP STAC API. **Pings the API for each collection’s temporal extent** (start/end dates) and uses those when available; otherwise uses fallback ranges. Writes **`collection_temporal_extent.json`** (dates per collection) and GeoJSON + CSV under `data/data_availability/`.
+**`csdap_planet_umbra_footprints.py`** — Fetches Planet, Umbra, ICEYE, Satellogic footprints over California from the CSDAP STAC API. Writes GeoJSON + CSV under `data/data_availability/`.
 
 Run: `pip install pystac-client` then `python scripts/csdap_planet_umbra_footprints.py`
 
@@ -22,11 +22,14 @@ Run after step 1: `python scripts/fire_planet_umbra_overlap.py`
 
 See `docs/FIND_PLANET_UMBRA_FIRE.md` for the full workflow.
 
-## 4. Best post-burn scar from Satellogic (CONUS)
+## 4. Fires intersecting Satellogic or ICEYE (entire USA)
 
-**`rank_postburn_satellogic_conus.py`** — Pulls **CSDA Satellogic** footprints over CONUS, computes **temporal availability**, joins to **WFIGS fire perimeters**, and ranks the best **post-burn** candidates. Also writes a small text snippet you can paste into `gee_landsat_s2_export.js` to verify quickly in GEE with Landsat + Sentinel-2.
+**`find_fires_intersecting_satellogic.py`** — NIFC perimeters vs CSDAP footprints (spatial + temporal: scene within discovery+60d). **Satellogic** by default; **ICEYE** with `--collection iceye`.
 
-Run:
+- **Satellogic:** `python scripts/find_fires_intersecting_satellogic.py`
+- **ICEYE:** `python scripts/find_fires_intersecting_iceye.py` (or same script `--collection iceye`)
+- **Both (runner):** `python scripts/run_find_fire_for_gee.py` — runs Satellogic then ICEYE.
 
-- `pip install -r requirements.txt`
-- `python scripts/rank_postburn_satellogic_conus.py`
+If **Satellogic + NIFC: NONE**, the script prints the exact **ICEYE** command next; no fake GEE paste unless `--sample-footprint`.
+
+Run: `pip install pystac-client geopandas`. See `docs/VERIFY_BURN_SATELLOGIC_LANDSAT_S2.md`.

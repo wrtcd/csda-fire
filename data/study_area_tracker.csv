@@ -1,2 +1,5 @@
-fire_name,fire_year,alarm_date,cont_date,bbox_wgs84,planet_item_id,planet_date,umbra_item_id,umbra_date,landsat_id,landsat_date,sentinel2_id,sentinel2_date,notes
-,,,,,,,,,,,Pick a fire from candidate_fires_planet_umbra.csv (e.g. EATON LAKE MOUNTAIN FRANKLIN). Fill bbox and dates; then GEE for L+S2 CSDAP for P+U.
+fire_name,fire_year,alarm_date,cont_date,bbox_wgs84,planet_item_id,planet_date,satellogic_item_id,satellogic_date,umbra_item_id,umbra_date,iceye_item_id,iceye_date,landsat_id,landsat_date,sentinel2_id,sentinel2_date,notes
+,,,,,,,,,,,,,,,,,Pick a fire from candidate_fires_planet_umbra.csv (e.g. EATON LAKE MOUNTAIN FRANKLIN). Fill bbox and dates; then GEE for L+S2 CSDAP for P+U.
+PALISADES,2025,2025-01-07,,"-118.6859,34.0298,-118.5006,34.1294",,,,,,,,,,,,,,"California fire. For now, prioritize Landsat + Sentinel‑2; later add Planet + Umbra once CSDA access is confirmed."
+EATON,2025,2025-01-08,,"-118.1621,34.1619,-118.0131,34.2378",,,,,,,,,,,,,,"California fire. For now, prioritize Landsat + Sentinel‑2; later add Planet + Umbra once CSDA access is confirmed."
+HUGHES,2025,2025-01-22,,"-118.6269,34.4754,-118.5402,34.5814",,,,,,,,,,,,,,"California fire. For now, prioritize Landsat + Sentinel‑2; later add Planet + Umbra once CSDA access is confirmed."
