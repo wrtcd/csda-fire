@@ -2,7 +2,7 @@
 
 ## Goal
 
-Create a **single, self-contained PowerPoint slide** that is aesthetically pleasing and visually appealing, aligned with current guidance from KPV:
+Create a **single, self-contained PowerPoint slide** that is aesthetically pleasing and visually appealing, aligned with current project direction:
 
 | Left side | Right side |
 |-----------|------------|
@@ -20,7 +20,7 @@ Create a **single, self-contained PowerPoint slide** that is aesthetically pleas
 
 1. **Data intersection** — Finding dates and locations where all 5 sources (Planet, Satellogic, Umbra, ICEYE, Landsat) have imagery.
 2. **Case study choice** — Picking a fire that is visually striking and has good coverage.
-3. **CSDAP usability** — Map shows availability by tile, not by image footprint; hard to see exact spatial extent. Thumbnails/metadata (e.g. JSON) on click may help; [Data Acquisition Request System](https://csdap.earthdata.nasa.gov/user-guide/#data-acquisition-request-system) is relevant. Current account may lack download permissions (waiting on boss’s credentials).
+3. **CSDAP usability** — Map shows availability by tile, not by image footprint; hard to see exact spatial extent. Thumbnails/metadata (e.g. JSON) on click may help; [Data Acquisition Request System](https://csdap.earthdata.nasa.gov/user-guide/#data-acquisition-request-system) is relevant. Current account may lack download permissions (pending appropriate access credentials).
 4. **Site selection** — From CAL FIRE shapefile: sort by **year**, **size (area)**, and prioritize fires with **data availability** across sources.
 
 ---

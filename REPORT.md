@@ -7,7 +7,7 @@
 - **2024 fires tested (including the large PARK fire)**: Planet and Landsat/Sentinel‑2 have strong optical coverage; Umbra, ICEYE, and Satellogic all return **0** scenes over the tested AOIs/date windows.
 - **2025 SoCal fires tested (PALISADES, EATON, HUGHES)**: Planet and Umbra have multiple scenes; ICEYE and Satellogic return **0** scenes.
 - The strongest CSDA multi-source combination actually observed over the California test fires is **Planet + Umbra (plus Landsat/Sentinel‑2 from GEE)**; all tables below provide supporting detail.
-- **Operationally, per KPV’s guidance**, the near-term focus is to: (1) build a clean California case study using **Landsat + Sentinel‑2** (and later Planet + Umbra) and (2) search for **Southeastern U.S. sites (including Alabama)** with CSDA coverage, using **single-site ICEYE examples** compared with Sentinel/Landsat where multi-mission intersections are not available.
+- **Operationally**, the near-term focus is to: (1) build a clean California case study using **Landsat + Sentinel‑2** (and later Planet + Umbra) and (2) search for **Southeastern U.S. sites (including Alabama)** with CSDA coverage, using **single-site ICEYE examples** compared with Sentinel/Landsat where multi-mission intersections are not available.
 
 ## Objective
 
@@ -116,7 +116,7 @@ In all 2025 tests, Planet and Umbra showed archive coverage; ICEYE and Satellogi
 | ICEYE 2025 histogram        | No 2025 bar in `iceye_hist.png` → no 2025 archive entries visible in catalog.              |
 | Strongest observed combo    | Planet + Umbra (plus Landsat/Sentinel‑2 from GEE) for 2025 SoCal candidates.               |
 
-### Planned operational next steps (per KPV)
+### Planned operational next steps
 
 - **California**: build a primary case study using **Landsat + Sentinel‑2** over a CAL FIRE perimeter, then, once CSDA access is confirmed, augment with **Planet + Umbra** on the same (or closest) post‑fire date.
 - **Southeastern states (including Alabama)**: search CSDA for sites that intersect fire locations; where multi-mission intersections do not exist, use **single-site examples** (e.g., **ICEYE over an Alabama fire**) and compare them against **Sentinel‑2 or Landsat**.
